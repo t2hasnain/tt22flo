@@ -106,130 +106,39 @@ $(document).ready(function() {
     });
     // dropdown hovers
 
-
     // js-image-zoom effect
     // var zoom_img = document.querySelector('.zoomimg');
     // var options = {
-    //     width: 300,
+    //     width: 400,
+    //     height: 350,
     //     zoomWidth: 600,
-    //     // scale: 0.5,
+    //     scale: 0.5,
     //     // zoomStyle: 'height:500px;width:12000px;border-radius:2px;',
     //     // zoomLensStyle: 'opacity: 0.3;height: 10px;width: 20px;background-color: black;',
-    //     offset: {vertical: 20, horizontal: 30}
+    //     // offset: {vertical: 20, horizontal: 10}
     //     // zoomPosition: 'right',
     //     // zoomContainer: document.querySelector('.zoomimg')
-    // };
-    // new ImageZoom(document.querySelector('.image-box'), options);
-
-
-// color selection hover image change
-$('.colorImg').hover(function(){
-    $('.productImg').attr('src',$(this).attr('src'));
-});
-// color selection hover image change
-
-
-
-
-
-// increase / decrease product quantity
-    let $qtyIncr = $('.qtyIncr');
-    let $qtyDecr = $('.qtyDecr');
-
-    // price details update
-    let $subPrice = $('#subPrice');
-    let $subDiscount = $('#subDiscount');
-    let $subTotal = $('#subTotal');
-    let $subSaved = $('#subSaved');
-    
-    let $subTotalInput = $('#subTotalInput');
-
-    $qtyIncr.click(function(e){
-
-        let $input = $(`.qtyInput[data-id='${$(this).data("id")}']`);
-        let $productPrice = $(`#productPrice[data-id='${$(this).data("id")}']`);
-        let $productCuttedPrice = $(`#productCuttedPrice[data-id='${$(this).data("id")}']`);
-
-        $.ajax({
-            url: "partials/product_data.php",
-            type: "POST",
-            data: {product_id:$(this).data('id')},
-            success: function(result){
-                // console.log(result);
-                let object = JSON.parse(result);
-                // console.log(object);
-
-                let product_price = object[0]['product_price'];
-                let product_cprice = object[0]['product_cutted_price'];
-
-                if($input.val()>=1 && $input.val()<=10){
-                    $input.val(function(i, oldval){
-                            return ++oldval;
-                    });
-
-                    $productPrice.text('₹'+parseInt(product_price * $input.val()).toLocaleString());
-                    $productCuttedPrice.text('₹'+parseInt(product_cprice * $input.val()).toLocaleString());
-                    
-                    // alert(parseInt($subPrice.text().replace(/,/g, '')));
-                    let subTotalPrice = parseInt($subPrice.text().replace(/,/g, '')) + parseInt(product_cprice);
-                    let subTotalDiscount = parseInt($subDiscount.text().replace(/,/g, '')) + parseInt(product_cprice-product_price);
-                    let subTotalAmount = parseInt($subTotal.text().replace(/,/g, '')) + parseInt(product_price);
-                    $subPrice.text(subTotalPrice.toLocaleString());
-                    $subDiscount.text(subTotalDiscount.toLocaleString());
-                    $subSaved.text(subTotalDiscount.toLocaleString());
-                    $subTotal.text(subTotalAmount.toLocaleString());
-
-                    $subTotalInput.val(subTotalAmount);
-
-                }
-            }
-        });
-
-    });
-
-    $qtyDecr.click(function(e){
-
-        let $input = $(`.qtyInput[data-id='${$(this).data("id")}']`);
-        let $productPrice = $(`#productPrice[data-id='${$(this).data("id")}']`);
-        let $productCuttedPrice = $(`#productCuttedPrice[data-id='${$(this).data("id")}']`);
         
-        $.ajax({
-            url: "partials/product_data.php",
-            type: "POST",
-            data: {product_id:$(this).data('id')},
-            success: function(result){
-                // console.log(result);
-                let object = JSON.parse(result);
-                // console.log(object);
+    // };
+    
+    // new ImageZoom(document.querySelector('.img-container'), options);        
 
-                let product_price = object[0]['product_price'];
-                let product_cprice = object[0]['product_cutted_price'];
 
-                if($input.val() > 1 && $input.val()<=11){
-                    $input.val(function(i, qtynos){
-                        return --qtynos;
-                    });
-
-                    $productPrice.text('₹'+parseInt(product_price * $input.val()).toLocaleString());
-                    $productCuttedPrice.text('₹'+parseInt(product_cprice * $input.val()).toLocaleString());
-
-                    // alert(parseInt($subPrice.text().replace(/,/g, '')));
-                    let subTotalPrice = parseInt($subPrice.text().replace(/,/g, '')) - parseInt(product_cprice);
-                    let subTotalDiscount = parseInt($subDiscount.text().replace(/,/g, '')) - parseInt(product_cprice-product_price);
-                    let subTotalAmount = parseInt($subTotal.text().replace(/,/g, '')) - parseInt(product_price);
-                    $subPrice.text(subTotalPrice.toLocaleString());
-                    $subDiscount.text(subTotalDiscount.toLocaleString());
-                    $subSaved.text(subTotalDiscount.toLocaleString());
-                    $subTotal.text(subTotalAmount.toLocaleString());
-
-                    $subTotalInput.val(subTotalAmount);
-
-                }
+    $('#qtyUp').on('click',function(e){
+        if($('#qtyInput').val()>=1 && $('#qtyInput').val()<=10){
+            $('#qtyInput').val(function(i, oldval){
+                    return ++oldval;
+                });
             }
-        });
-
     });
-// increase / decrease product quantity
+
+    $('#qtyDown').on('click',function(){
+        if($('#qtyInput').val()>=2 && $('#qtyInput').val()<=11){
+            $('#qtyInput').val(function(i, qtynos){
+                return --qtynos;
+            })
+        }
+    });
 
 
     // personal info edit buttons
@@ -263,11 +172,11 @@ $('.colorImg').hover(function(){
                 $(`${inputs} input`).prop('disabled',true)
     }
 
-    // toggleEdit('#emailEditBtn','#emailSaveBtn','#emailInputs');
+    toggleEdit('#emailEditBtn','#emailSaveBtn','#emailInputs');
     toggleEdit('#mobEditBtn','#mobSaveBtn','#mobInputs');
 
 // timer 
-let time = 3;
+let time = 5;
 let interval = setInterval(function() {
     time--;
     $('#timer').text(time);
@@ -276,73 +185,4 @@ let interval = setInterval(function() {
     }
 }, 1000);
 
-
-    // let $amount = parseInt($subTotal.text().replace(/,/g, ''));
- 
-//     var options = {
-//     "key": "rzp_test_svnGRsVDKLaUHy", // Enter the Key ID generated from the Dashboard
-//     "amount": parseInt($subTotal.text().replace(/,/g, '')), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-//     "currency": "INR",
-//     "name": "Flipkart Clone PHP",
-//     "description": "Place Order",
-//     "image": "https://example.com/your_logo",
-//     "handler": function (response){
-//         console.log(response);
-//     },
-//     "prefill": {
-//         "name": "Gaurav Kumar",
-//         "email": "gaurav.kumar@example.com",
-//         "contact": "9999999999"
-//     },
-//     "notes": {
-//         "address": "Razorpay Corporate Office"
-//     },
-//     "theme": {
-//         "color": "#3399cc"
-//     }
-// };
-// var rzp1 = new Razorpay(options);
-// document.getElementById('placeOrder').onclick = function(e){
-//     rzp1.open();
-//     e.preventDefault();
-//     // let $amount = parseInt($subTotal.text().replace(/,/g, ''));
-//      console.log(parseInt($subTotal.text().replace(/,/g, '')));
-// }
-
-
 });
-
-// disable developer mode
-document.onkeydown = function(e) {
-  if(e.keyCode == 123) {
-     return false;
-  }
-  if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-     return false;
-  }
-  if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-     return false;
-  }
-  if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-     return false;
-  }
-  if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-     return false;
-  }
-}
-
-// wishlist toggle
-
-// let $wishlistBtn = $('.wishlistBtn');
-// let $wishlistBtn = $('.wishlistBtn');
-
-// $wishlistBtn.each(function(index){
-//     $(this).on('click', function(){
-//         // $.ajax({
-//         //     url: "partials/wishlistajax.php",
-//         //     type: "POST",
-//         //     data: 
-//         // })
-//         $(this).toggleClass('text-red-500');
-//     });
-// });
